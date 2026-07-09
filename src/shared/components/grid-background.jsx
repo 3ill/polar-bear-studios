@@ -1,12 +1,6 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@lib/utils";
 
-
-
-const GridBackground = ({
-  children,
-  className,
-  variant = "default",
-}) => {
+const GridBackground = ({ children, className, variant = "default" }) => {
   const getGridStyles = () => {
     switch (variant) {
       case "dark":
@@ -16,7 +10,7 @@ const GridBackground = ({
       default:
         return cn(
           "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-          "dark:[background-image:linear-gradient(to_right,#404040_1px,transparent_1px),linear-gradient(to_bottom,#404040_1px,transparent_1px)]",
+          "dark:[background-image:linear-gradient(to_right,#404040_0.5px,transparent_0.5px),linear-gradient(to_bottom,#404040_0.5px,transparent_0.5px)]"
         );
     }
   };
@@ -29,8 +23,8 @@ const GridBackground = ({
       <div
         className={cn(
           "absolute inset-0 z-0",
-          "bg-size[_20px_20px]",
-          getGridStyles(),
+          "[background-size:30px_30px]",
+          getGridStyles()
         )}
       />
 
