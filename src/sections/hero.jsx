@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="w-full scroll-smooth">
+    <section id="hero" className="w-full scroll-smooth">
       <LampContainer>
         <div className="c-space flex flex-col items-center justify-center">
           <GlowWave
