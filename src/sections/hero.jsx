@@ -5,16 +5,16 @@ import { ArrowRight } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section id="hero" className="w-full scroll-smooth">
+    <section id="hero" className="w-full overflow-x-hidden overflow-y-auto scroll-smooth">
       <LampContainer>
-        <div className="c-space flex flex-col items-center justify-center">
+        <div className="c-space flex flex-col w-full items-center justify-center">
           <GlowWave
-            text="Polar bear studios"
-            className="font-bebas text-[48px] font-bold text-neutral-50 sm:text-8xl"
+            text="Polaroid"
+            className="font-bebas text-[60px] font-bold text-neutral-50 sm:text-6xl lg:text-8xl"
             letterDelay={0.05}
             animationDuration={0.6}
           />
-          <p className="motion-preset-expand motion-duration-300 font-grotesk mt-6 mb-6 max-w-2xl px-4 text-center text-lg text-neutral-400 capitalize md:text-xl">
+          <p className="motion-preset-expand motion-duration-300 font-grotesk mt-6 mb-6 max-w-2xl px-4 text-center text-sm sm:text-lg text-neutral-400 capitalize md:text-xl">
             Upload 3D models and experience immersive visualization in your
             browser or VR headset
           </p>

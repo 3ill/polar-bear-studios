@@ -50,14 +50,14 @@ const WaitList = () => {
           </p>
         </div>
 
-        <div className="relative flex w-full flex-col gap-4 sm:w-1/2 lg:gap-8">
+        <div className="relative flex w-full flex-col gap-4 lg:w-1/2 lg:gap-8">
           {/* Gradient Background */}
           <div className="absolute inset-0 -z-10 rounded-[20px] bg-gradient-to-br from-white/10 via-neutral-300/5 to-transparent blur-xl"></div>
 
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 px-4 py-15 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8 lg:px-8"
+              className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 py-15 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8 "
             >
               <h2 className="text-glow font-bebas pb-5 text-center text-2xl tracking-wider text-neutral-50 md:text-3xl">
                 Request Access

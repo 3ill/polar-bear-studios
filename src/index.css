@@ -29,7 +29,7 @@ body {
   }
 
   .form-input {
-    @apply placeholder:font-grotesk font-grotesk h-10 max-w-[400px] rounded-[20px] border border-neutral-400 text-sm text-neutral-50 placeholder:text-[12px] placeholder:text-neutral-400 focus:ring-0 focus:outline-none lg:text-[16px];
+    @apply placeholder:font-grotesk font-grotesk h-10 w-full sm:w-[400px]  rounded-[20px] border border-neutral-400 text-sm text-neutral-50 placeholder:text-[12px] placeholder:text-neutral-400 focus:ring-0 focus:outline-none lg:text-[16px];
   }
 
   .text-glow {

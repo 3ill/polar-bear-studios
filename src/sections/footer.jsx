@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="c-space flex w-full flex-col relative bg-neutral-700/50 py-5">
-      <div className="absolute top-1 flex origin-top-left scale-[1] gap-2 text-black dark:text-white">
+      <div className="absolute top-1.5 flex origin-top-left scale-[1] gap-2 text-black dark:text-white">
         <TextEffectWithExit
           text="Powered by Polar Bear"
           style=" text-lg tracking-wider font-bold text-neutral-50"
@@ -16,7 +16,7 @@ const Footer = () => {
           <a
             key={link.id}
             href={link.href}
-            className="font-grotesk font-medium text-sm capitalize text-neutral-300"
+            className="font-grotesk font-light text-sm capitalize text-neutral-300"
           >
             <div className="flex flex-row gap-2 text-nowrap">
               <p>{link.name}</p>
@@ -26,7 +26,7 @@ const Footer = () => {
         ))}
       </div>
 
-      <div className="font-grotesk flex items-center gap-2 self-center pt-4">
+      <div className="font-grotesk font-light flex items-center gap-2 self-center pt-4">
         <p className="text-[12px] text-neutral-50">
           © 2026 Polar Bear Studios. All rights reserved.
         </p>
