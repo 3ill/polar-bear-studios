@@ -14,7 +14,6 @@ import {
 } from "@/shared/components/ui/form";
 import { HoverBorderGradient } from "@/shared/components/ui/hover-border-gradient";
 import { ArrowRight } from "lucide-react";
-import { LampContainer } from "@/shared/components/ui/lamp";
 
 const waitlistSchema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -57,7 +56,7 @@ const WaitList = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 py-15 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8 "
+              className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 py-10 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8"
             >
               <h2 className="text-glow font-bebas pb-5 text-center text-2xl tracking-wider text-neutral-50 md:text-3xl">
                 Request Access
