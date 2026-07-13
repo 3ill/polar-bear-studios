@@ -4,13 +4,13 @@ const GridBackground = ({ children, className, variant = "default" }) => {
   const getGridStyles = () => {
     switch (variant) {
       case "dark":
-        return "[background-image:linear-gradient(to_right,#404040_1px,transparent_1px),linear-gradient(to_bottom,#404040_1px,transparent_1px)]";
+        return "[background-image:linear-gradient(to_right,#262626_0.5px,transparent_0.5px),linear-gradient(to_bottom,#262626_0.5px,transparent_0.5px)]";
       case "light":
         return "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]";
       default:
         return cn(
           "[background-image:linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-          "dark:[background-image:linear-gradient(to_right,#404040_0.5px,transparent_0.5px),linear-gradient(to_bottom,#404040_0.5px,transparent_0.5px)]"
+          "dark:[background-image:linear-gradient(to_right,#262626_0.5px,transparent_0.5px),linear-gradient(to_bottom,#262626_0.5px,transparent_0.5px)]"
         );
     }
   };

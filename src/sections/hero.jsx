@@ -17,7 +17,7 @@ const Hero = () => {
             letterDelay={0.05}
             animationDuration={0.6}
           />
-          <p className="motion-preset-expand motion-duration-300 font-grotesk mt-6 mb-6 max-w-2xl px-4 text-center text-sm text-neutral-400 capitalize sm:text-lg md:text-xl">
+          <p className="motion-preset-expand motion-duration-700 font-grotesk mt-6 mb-6 max-w-2xl px-4 text-center text-sm text-neutral-400 capitalize sm:text-lg md:text-xl">
             Upload 3D models and experience immersive visualization in your
             browser or VR headset
           </p>
@@ -26,7 +26,7 @@ const Hero = () => {
               href="#waitlist"
               className="group flex flex-row items-center gap-2 text-nowrap"
             >
-              <p className="font-bebas text-sm tracking-wider text-neutral-50">
+              <p className="font-bebas text-lg tracking-wider text-neutral-50 sm:text-xl">
                 Join Now
               </p>{" "}
               <ArrowRight className="h-4 w-4 rotate-45 transition-all duration-300 group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
