@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -15,15 +14,15 @@ import {
 import { HoverBorderGradient } from "@/shared/components/ui/hover-border-gradient";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { slideIn, staggerContainer, textVariant2 } from "@/utils/motion";
-
-const waitlistSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().min(1, "Email is required").email("Enter a valid email"),
-});
+import { staggerContainer, textVariant2 } from "@/utils/motion";
+import { waitlistSchema } from "@/features/waitlist/schema/waitlist.schema";
+import { useAddToWaitlist } from "@/features/waitlist/hooks/use-add-to-waitlist";
+import { toast } from "sonner";
+import ToastIcon from "@/shared/components/toast-icon";
+import ToastDescription from "@/shared/components/toast-description";
 
 const WaitList = () => {
+  const { mutateAsync: addToWaitlist } = useAddToWaitlist();
   const form = useForm({
     resolver: zodResolver(waitlistSchema),
     defaultValues: {
@@ -33,9 +32,61 @@ const WaitList = () => {
     },
   });
 
-  const onSubmit = (values) => {
-    console.log(values);
-    form.reset();
+  const handleToast = (data) => {
+    if (data.status === 201) {
+      toast.success(data.message || "Successfully joined the waitlist!", {
+        icon: <ToastIcon />,
+        description: (
+          <ToastDescription description="Check your email for next steps" />
+        ),
+        style: {
+          backgroundColor: "oklch(62.7% 0.194 149.214)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+    } else if (data.status === 400) {
+      toast.error("Validation Error", {
+        icon: <ToastIcon />,
+        description: (
+          <ToastDescription
+            description={`This email is already added to the waitlist`}
+          />
+        ),
+        style: {
+          backgroundColor: "oklch(62.8% 0.258 29.234)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+    } else {
+      toast.error("Error", {
+        icon: <ToastIcon />,
+        description: <ToastDescription description="An error occurred" />,
+        style: {
+          backgroundColor: "oklch(62.8% 0.258 29.234)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+    }
+  };
+
+  const onSubmit = async (values) => {
+    console.log("Submitting values:", values);
+    const data = await addToWaitlist(values);
+    console.log("Response data:", data);
+    handleToast(data);
+
+    if (data.status === 201) {
+      form.reset();
+    }
   };
 
   return (
@@ -94,7 +145,7 @@ const WaitList = () => {
                           className="form-input"
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className={`font-grotesk text-red-500`} />
                     </FormItem>
                   )}
                 />
@@ -111,7 +162,7 @@ const WaitList = () => {
                           className="form-input"
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className={`font-grotesk text-red-500`} />
                     </FormItem>
                   )}
                 />
@@ -130,7 +181,7 @@ const WaitList = () => {
                         className="form-input"
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className={`font-grotesk text-red-500`} />
                   </FormItem>
                 )}
               />

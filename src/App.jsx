@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "sonner";
 
 import Footer from "./sections/footer";
 import Hero from "./sections/hero";
@@ -15,10 +16,19 @@ const Home = () => (
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/upload" element={<Upload />} />
-    </Routes>
+    <>
+      <Toaster
+        position="bottom-right"
+        expand={true}
+        richColors
+        closeButton
+        theme="dark"
+      />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/upload" element={<Upload />} />
+      </Routes>
+    </>
   );
 };
 

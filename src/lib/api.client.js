@@ -1,4 +1,4 @@
-import { httpClient } from "./http_client";
+import { httpClient } from "./http.client";
 
 /**
  * API Client - Simplified interface for making HTTP requests
@@ -55,7 +55,24 @@ export class ApiClient {
   }
 
   static handleError(error) {
-    return error;
+    if (error.response) {
+      const errorObj = {
+        status: error.response.status,
+        message: error.response.data?.message || error.message,
+        data: error.response.data,
+      };
+      return errorObj;
+    } else if (error.request) {
+      return {
+        status: 500,
+        message: "No response from server",
+      };
+    } else {
+      return {
+        status: 500,
+        message: error.message,
+      };
+    }
   }
 }
 
