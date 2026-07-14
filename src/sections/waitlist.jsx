@@ -114,7 +114,11 @@ const WaitList = () => {
             className="font-grotesk text-sm text-neutral-400 capitalize md:text-lg"
           >
             Be the first to experience our immersive 3D model visualization
-            platform. Sign up for early access and stay updated on our launch.
+            platform. Sign up for early access and stay updated on our launch.{" "}
+            <br />
+            <span className="text-neutral-600">
+              Email might be in your spam folder, ensure you check
+            </span>
           </motion.p>
         </motion.div>
 
