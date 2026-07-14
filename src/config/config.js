@@ -1,12 +1,14 @@
 import { z } from "zod";
-import { ResendConfig } from "./resend/resend.config";
+import { AppConfig } from "./app_config/app.config";
 
-const resendConfig = new ResendConfig();
+const appConfig = new AppConfig();
 
-const resendConfigSchema = z.object({
-  key: z.string().min(1, "Resend API key is required"),
+const appConfigSchema = z.object({
+  key: z.string().min(1, "App API key is required"),
+  APP_BASE_URL: z.string().url("Invalid base URL"),
 });
 
 export const _appConfig = {
-  resend: resendConfigSchema.parse(resendConfig.getResendKey()),
+  appApiKey: appConfigSchema.parse(appConfig.getAppConfig()).key,
+  appBaseUrl: appConfigSchema.parse(appConfig.getAppkey()).APP_BASE_URL,
 };
