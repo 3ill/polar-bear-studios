@@ -1,7 +1,9 @@
 import GridBackground from "@/shared/components/grid-background";
 import { HoverBorderGradient } from "@/shared/components/ui/hover-border-gradient";
-import { ArrowRight } from "lucide-react";
+import { ArrowBigLeftDashIcon, ArrowRight } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
+import UploadForm from "@/features/upload/components/upload-form";
+import Footer from "./footer";
 
 const Upload = () => {
   const [searchParams] = useSearchParams();
@@ -34,18 +36,28 @@ const Upload = () => {
   }
 
   return (
-    <section
-      id="upload"
-      className="c-space flex min-h-screen w-full flex-col items-center overflow-x-hidden text-center"
-    >
-      <h1 className="font-bebas text-4xl font-bold text-neutral-50 sm:text-5xl lg:text-6xl">
-        Upload
-      </h1>
+    <section id="upload" className="overflow-x-hidden">
+      <GridBackground>
+        <div className="c-space flex min-h-screen w-full flex-col items-center overflow-x-hidden py-5 text-center">
+          <div className="flex w-full max-w-4xl flex-row items-center justify-between">
+            <a href="/#waitlist">
+              <ArrowBigLeftDashIcon className="h-6 w-6 text-neutral-300 transition-all duration-300 hover:translate-x-1 hover:text-neutral-50 sm:h-8 sm:w-8" />
+            </a>
 
-      <p className="font-grotesk mt-6 max-w-2xl px-4 text-lg text-neutral-400 sm:text-xl">
-        Uploading as{" "}
-        <span className="font-medium text-neutral-50">{email}</span>
-      </p>
+            <div className="flex flex-row items-center gap-1">
+              <div className="text-glow motion-preset-blink motion-duration-700 h-3 w-1 rounded-md bg-white"></div>
+              <p className="font-mono text-[12px] text-neutral-300 sm:text-sm">
+                {email}
+              </p>
+            </div>
+          </div>
+
+          <div className="relative mt-12 flex w-full max-w-xl flex-col items-center">
+            <div className="absolute inset-0 -z-10 rounded-[20px] bg-gradient-to-br from-white/10 via-neutral-50/5 to-transparent blur-xl"></div>
+            <UploadForm />
+          </div>
+        </div>
+      </GridBackground>
     </section>
   );
 };
