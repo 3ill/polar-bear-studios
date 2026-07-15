@@ -3,11 +3,11 @@ import { HoverBorderGradient } from "@/shared/components/ui/hover-border-gradien
 import { ArrowBigLeftDashIcon, ArrowRight } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 import UploadForm from "@/features/upload/components/upload-form";
-import Footer from "./footer";
 
 const Upload = () => {
   const [searchParams] = useSearchParams();
-  const email = searchParams.get("email");
+  const emailParam = searchParams.get("email");
+  const email = emailParam ? decodeURIComponent(emailParam) : null;
 
   if (!email) {
     return (
