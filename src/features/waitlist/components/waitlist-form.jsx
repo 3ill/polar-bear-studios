@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -20,6 +21,7 @@ import ToastIcon from "@/shared/components/toast-icon";
 import ToastDescription from "@/shared/components/toast-description";
 
 const WaitlistForm = () => {
+  const navigate = useNavigate();
   const { mutateAsync: addToWaitlist } = useAddToWaitlist();
   const form = useForm({
     resolver: zodResolver(waitlistSchema),
@@ -82,6 +84,8 @@ const WaitlistForm = () => {
 
     if (data.status === 201) {
       form.reset();
+    } else if (data.status === 400) {
+      navigate(`/upload?email=${encodeURIComponent(values.email)}`);
     }
   };
 
@@ -103,11 +107,7 @@ const WaitlistForm = () => {
               <FormItem className="w-full">
                 <FormLabel className="form-label">First name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="John"
-                    {...field}
-                    className="form-input"
-                  />
+                  <Input placeholder="John" {...field} className="form-input" />
                 </FormControl>
                 <FormMessage className={`font-grotesk text-red-500`} />
               </FormItem>
@@ -120,11 +120,7 @@ const WaitlistForm = () => {
               <FormItem className="w-full">
                 <FormLabel className="form-label">Last name</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Doe"
-                    {...field}
-                    className="form-input"
-                  />
+                  <Input placeholder="Doe" {...field} className="form-input" />
                 </FormControl>
                 <FormMessage className={`font-grotesk text-red-500`} />
               </FormItem>
