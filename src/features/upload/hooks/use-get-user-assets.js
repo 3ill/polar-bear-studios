@@ -1,18 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { ok, ResultAsync } from "neverthrow";
-import { verifyWaitlist } from "../api/verify/route";
+import { getUserAssets } from "../api/get-asset/route";
 
-export const useVerifyWaitlist = (email) => {
+export const useGetUserAssets = (email) => {
   return useQuery({
-    queryKey: [`verify-waitlist-${email}`],
+    queryKey: [`get-user-assets-${email}`],
     queryFn: async () => {
       const result = await ResultAsync.fromPromise(
-        verifyWaitlist(email),
-        (error) => {
-          return error;
-        }
+        getUserAssets(email),
+        (error) => error
       ).andThen((data) => {
-        return ok({ status: 201, ...data });
+        return ok({ status: 200, ...data });
       });
 
       if (result.isErr()) {
@@ -24,7 +22,13 @@ export const useVerifyWaitlist = (email) => {
         };
       }
 
-      return result.value;
+      const assetLength = result.value.data.length || 0;
+
+      return {
+        status: result.value.status,
+        data: result.value.data,
+        assetLength: assetLength,
+      };
     },
     enabled: !!email, // Only run the query if email is provided
   });

@@ -78,11 +78,33 @@ const WaitlistForm = () => {
     }
   };
 
+  const handleAlreadyInWaitlist = () => {
+    const userData = JSON.parse(localStorage.getItem("waitlistUserData"));
+    if (userData && userData.email) {
+      navigate(`/upload?email=${encodeURIComponent(userData.email)}`);
+    } else {
+      toast.error("Error", {
+        icon: <ToastIcon />,
+        description: (
+          <ToastDescription description="Can not detect email, please fill the form" />
+        ),
+        style: {
+          backgroundColor: "oklch(62.8% 0.258 29.234)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+    }
+  };
+
   const onSubmit = async (values) => {
     const data = await addToWaitlist(values);
     handleToast(data);
 
     if (data.status === 201) {
+      navigate(`/upload?email=${encodeURIComponent(values.email)}`);
       form.reset();
     } else if (data.status === 400) {
       navigate(`/upload?email=${encodeURIComponent(values.email)}`);
@@ -93,7 +115,7 @@ const WaitlistForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 py-10 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8"
+        className="c-space relative z-10 flex w-full flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-800/50 py-10 shadow-lg backdrop-blur-md lg:gap-8"
       >
         <h2 className="text-glow font-bebas pb-5 text-center text-2xl tracking-wider text-neutral-50 md:text-3xl">
           Request Access
@@ -159,6 +181,21 @@ const WaitlistForm = () => {
               <ArrowRight className="h-4 w-4 transition-all duration-300 hover:translate-x-1" />
             </div>
           </HoverBorderGradient>
+        </div>
+
+        <div className="font-grotesk flex items-center pt-20 text-[12px] text-neutral-100 sm:pt-25">
+          <button>
+            <p>
+              Already in the waitlist? click{" "}
+              <span
+                onClick={handleAlreadyInWaitlist}
+                className="text-yellow-500 underline"
+              >
+                here
+              </span>{" "}
+              to upload your asset
+            </p>
+          </button>
         </div>
       </form>
     </Form>

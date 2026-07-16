@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Upload } from "lucide-react";
+import { ArrowRight, FolderArchiveIcon, Upload } from "lucide-react";
 
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
@@ -18,8 +18,16 @@ import { toast } from "sonner";
 import ToastIcon from "@/shared/components/toast-icon";
 import ToastDescription from "@/shared/components/toast-description";
 import GlowWave from "@/shared/components/glow-wave";
+import { zipFile } from "@/utils/zip";
+import { useHandleUpload } from "@/features/upload/hooks/use-handle-upload";
+import { getTruncatedName } from "@/utils/truncate";
+import { useGetUserAssets } from "../hooks/use-get-user-assets";
+import TextEffectWithExit from "@/shared/components/text-effect";
 
-const UploadForm = () => {
+const UploadForm = ({ email }) => {
+  const { data } = useGetUserAssets(email);
+  const { mutateAsync: handleUpload, isSubmitting } = useHandleUpload();
+
   const form = useForm({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
@@ -30,43 +38,68 @@ const UploadForm = () => {
 
   const fileList = form.watch("model");
   const selectedFile = fileList?.[0];
-
-  const getTruncatedName = (name, maxLength = 30) => {
-    if (!name) return "";
-    if (name.length <= maxLength) return name;
-    const extensionIndex = name.lastIndexOf(".");
-    if (extensionIndex !== -1 && name.length - extensionIndex < 10) {
-      const ext = name.substring(extensionIndex);
-      const base = name.substring(0, extensionIndex);
-      const remainingLength = maxLength - ext.length - 3;
-      if (remainingLength > 0) {
-        return base.substring(0, remainingLength) + "..." + ext;
-      }
-    }
-    return name.substring(0, maxLength - 3) + "...";
-  };
+  console.log("asset data", data);
 
   const onSubmit = async (values) => {
     const file = values.model[0];
+    const baseName = values.name.replace(/\.(gltf|glb)$/i, "");
+    const zipName = `${baseName}.zip`;
 
-    // TODO: wire this up to the upload endpoint once it is available.
-    console.log("Uploading file:", file, "as", values.name);
+    const uploadToastId = toast.loading(
+      `Zipping and uploading ${values.name}...`,
+      {
+        style: {
+          backgroundColor: "oklch(62.7% 0.194 149.214)",
+          fontSize: "12px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      }
+    );
 
-    toast.success(`${values.name} is ready to upload`, {
-      icon: <ToastIcon />,
-      description: (
-        <ToastDescription description="We'll process your model shortly" />
-      ),
-      style: {
-        backgroundColor: "oklch(62.7% 0.194 149.214)",
-        fontSize: "15px",
-        fontFamily: "Space Grotesk",
-        color: "#ffffff",
-        fontWeight: "600",
-      },
-    });
+    try {
+      const zippedBlob = await zipFile(file);
+      const result = await handleUpload({
+        file: zippedBlob,
+        name: zipName,
+        email,
+      });
 
-    form.reset();
+      toast.success(`${zipName} uploaded successfully!`, {
+        id: uploadToastId,
+        icon: <ToastIcon />,
+        description: (
+          <ToastDescription description={`File URL: ${result.vercel.url}`} />
+        ),
+        style: {
+          backgroundColor: "oklch(62.7% 0.194 149.214)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+
+      form.reset();
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error(`Failed to upload ${values.name}`, {
+        id: uploadToastId,
+        description: (
+          <ToastDescription
+            description={error.message || "An error occurred"}
+          />
+        ),
+        style: {
+          backgroundColor: "oklch(62.7% 0.194 149.214)",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+    }
   };
 
   return (
@@ -75,6 +108,13 @@ const UploadForm = () => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="c-space motion-preset-expand motion-duration-800 relative z-10 flex w-full max-w-xl flex-col items-center justify-center gap-5 rounded-[15px] bg-neutral-900/50 py-10 shadow-lg backdrop-blur-md sm:py-20 lg:gap-8"
       >
+        <div className="relative flex flex-row self-end">
+          <FolderArchiveIcon className="h-6 w-6 text-neutral-400" />
+          <div className="absolute -top-2.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-700 p-1 text-[10px] font-bold text-neutral-50">
+            {data?.length || 0}
+          </div>
+        </div>
+
         <GlowWave
           text="Upload your model"
           className="font-bebas text-2xl font-bold text-neutral-50 md:text-3xl"
@@ -141,9 +181,12 @@ const UploadForm = () => {
                       const files = event.target.files;
                       onChange(files);
                       if (files && files[0]) {
-                        form.setValue("name", files[0].name, {
-                          shouldValidate: true,
-                        });
+                        const currentName = form.getValues("name");
+                        if (!currentName || currentName.trim() === "") {
+                          form.setValue("name", files[0].name, {
+                            shouldValidate: true,
+                          });
+                        }
                       }
                     }}
                   />
@@ -153,6 +196,15 @@ const UploadForm = () => {
             </FormItem>
           )}
         />
+
+        {isSubmitting && (
+          <div className="flex self-center">
+            <TextEffectWithExit
+              text="Uploading asset, please wait ..."
+              style="text-sm tracking-wider font-bold text-neutral-50 max-w-prose"
+            />
+          </div>
+        )}
 
         <div className="flex items-center gap-2 self-center pt-10 sm:pt-16">
           <HoverBorderGradient>

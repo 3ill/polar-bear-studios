@@ -26,5 +26,13 @@ export const useAddToWaitlist = () => {
 
       return result.value;
     },
+    onSuccess: (data, variables) => {
+      const localUserData = {
+        email: variables.email,
+        firstName: variables.firstName,
+        lastName: variables.lastName,
+      };
+      localStorage.setItem("waitlistUserData", JSON.stringify(localUserData));
+    },
   });
 };
