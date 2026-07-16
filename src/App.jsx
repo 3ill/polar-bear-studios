@@ -18,7 +18,7 @@ const App = () => {
   return (
     <>
       <Toaster
-        position="bottom-right"
+        position="top-right"
         expand={true}
         richColors
         closeButton

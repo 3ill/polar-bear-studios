@@ -111,7 +111,7 @@ const UploadForm = ({ email }) => {
         <div className="relative flex flex-row self-end">
           <FolderArchiveIcon className="h-6 w-6 text-neutral-400" />
           <div className="absolute -top-2.5 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-neutral-700 p-1 text-[10px] font-bold text-neutral-50">
-            {data?.length || 0}
+            {data?.assetLength || 0}
           </div>
         </div>
 
@@ -166,7 +166,7 @@ const UploadForm = ({ email }) => {
                         {getTruncatedName(selectedFile.name)}
                       </span>
                     ) : (
-                      "Click to browse or drag a .gltf / .glb file here, max size 100MB"
+                      "Click to browse or drag a .gltf / .glb file here, max size 100MB, max 5 files per user"
                     )}
                   </p>
                   <input
@@ -211,7 +211,11 @@ const UploadForm = ({ email }) => {
             <div className="flex flex-row items-center gap-2 text-nowrap">
               <Button
                 type="submit"
-                disabled={form.formState.isSubmitting}
+                disabled={
+                  form.formState.isSubmitting ||
+                  !selectedFile ||
+                  data?.assetLength >= 5
+                }
                 className="font-bebas text-sm tracking-wider text-neutral-50"
               >
                 Upload
