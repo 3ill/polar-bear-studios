@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, FolderArchiveIcon, Upload } from "lucide-react";
 
-import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
   Form,
@@ -23,8 +22,10 @@ import { useHandleUpload } from "@/features/upload/hooks/use-handle-upload";
 import { getTruncatedName } from "@/utils/truncate";
 import { useGetUserAssets } from "../hooks/use-get-user-assets";
 import TextEffectWithExit from "@/shared/components/text-effect";
+import { useNavigate } from "react-router-dom";
 
 const UploadForm = ({ email }) => {
+  const navigate = useNavigate();
   const { data } = useGetUserAssets(email);
   const { mutateAsync: handleUpload, isSubmitting } = useHandleUpload();
 
@@ -44,6 +45,26 @@ const UploadForm = ({ email }) => {
     const file = values.model[0];
     const baseName = values.name.replace(/\.(gltf|glb)$/i, "");
     const zipName = `${baseName}.zip`;
+
+    if (!email) {
+      toast.error(`No email provided`, {
+        description: (
+          <ToastDescription
+            description={"Kindly join the waitlist to upload models"}
+          />
+        ),
+        style: {
+          backgroundColor: "red",
+          fontSize: "15px",
+          fontFamily: "Space Grotesk",
+          color: "#ffffff",
+          fontWeight: "600",
+        },
+      });
+
+      navigate("/#waitlist");
+      return;
+    }
 
     const uploadToastId = toast.loading(
       `Zipping and uploading ${values.name}...`,
@@ -92,7 +113,7 @@ const UploadForm = ({ email }) => {
           />
         ),
         style: {
-          backgroundColor: "oklch(62.7% 0.194 149.214)",
+          backgroundColor: "red",
           fontSize: "15px",
           fontFamily: "Space Grotesk",
           color: "#ffffff",
@@ -207,21 +228,18 @@ const UploadForm = ({ email }) => {
         )}
 
         <div className="flex items-center gap-2 self-center pt-10 sm:pt-16">
-          <HoverBorderGradient>
-            <div className="flex flex-row items-center gap-2 text-nowrap">
-              <Button
-                type="submit"
-                disabled={
-                  form.formState.isSubmitting ||
-                  !selectedFile ||
-                  data?.assetLength >= 5
-                }
-                className="font-bebas text-sm tracking-wider text-neutral-50"
-              >
+          <HoverBorderGradient
+            disabled={!selectedFile || data?.assetLength >= 5}
+          >
+            <button
+              type="submit"
+              className="flex flex-row items-center gap-2 text-nowrap"
+            >
+              <p className="font-bebas text-sm tracking-wider text-neutral-50">
                 Upload
-              </Button>
+              </p>
               <ArrowRight className="h-4 w-4 transition-all duration-300 hover:translate-x-1" />
-            </div>
+            </button>
           </HoverBorderGradient>
         </div>
       </form>
